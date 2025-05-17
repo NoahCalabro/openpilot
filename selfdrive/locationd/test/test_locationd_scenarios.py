@@ -1,4 +1,3 @@
-import numpy as np
 from collections import defaultdict
 from enum import Enum
 
@@ -32,6 +31,7 @@ class Scenario(Enum):
 
 
 def get_select_fields_data(logs):
+  import numpy as np
   def get_nested_keys(msg, keys):
     val = None
     for key in keys:
@@ -108,6 +108,7 @@ class TestLocationdScenarios:
       - yaw_rate: unchanged
       - roll: unchanged
     """
+    import numpy as np
     orig_data, replayed_data = run_scenarios(Scenario.BASE, self.logs)
     assert np.allclose(orig_data['yaw_rate'], replayed_data['yaw_rate'], atol=np.radians(0.35))
     assert np.allclose(orig_data['roll'], replayed_data['roll'], atol=np.radians(0.55))
@@ -120,6 +121,7 @@ class TestLocationdScenarios:
       - roll: 0
       - sensorsOK: False
     """
+    import numpy as np
     _, replayed_data = run_scenarios(Scenario.GYRO_OFF, self.logs)
     assert np.allclose(replayed_data['yaw_rate'], 0.0)
     assert np.allclose(replayed_data['roll'], 0.0)
@@ -133,6 +135,7 @@ class TestLocationdScenarios:
       - roll: unchanged
       - inputsOK: False for some time after the spike, True for the rest
     """
+    import numpy as np
     orig_data, replayed_data = run_scenarios(Scenario.GYRO_SPIKE_MIDWAY, self.logs)
     assert np.allclose(orig_data['yaw_rate'], replayed_data['yaw_rate'], atol=np.radians(0.35))
     assert np.allclose(orig_data['roll'], replayed_data['roll'], atol=np.radians(0.55))
@@ -144,6 +147,7 @@ class TestLocationdScenarios:
     Test: consistent timing spikes for N gyroscope messages in the middle of the segment
     Expected Result: inputsOK becomes False after N of bad measurements
     """
+    import numpy as np
     orig_data, replayed_data = run_scenarios(Scenario.GYRO_CONSISTENT_SPIKES, self.logs)
     assert np.diff(replayed_data['inputs_flag'])[501] == -1.0
     assert np.diff(replayed_data['inputs_flag'])[708] == 1.0
@@ -156,6 +160,7 @@ class TestLocationdScenarios:
       - roll: 0
       - sensorsOK: False
     """
+    import numpy as np
     _, replayed_data = run_scenarios(Scenario.ACCEL_OFF, self.logs)
     assert np.allclose(replayed_data['yaw_rate'], 0.0)
     assert np.allclose(replayed_data['roll'], 0.0)
@@ -167,6 +172,7 @@ class TestLocationdScenarios:
     Test: an accelerometer spike in the middle of the segment
     Expected Result: Right now, the kalman filter is not robust to small spikes like it is to gyroscope spikes.
     """
+    import numpy as np
     orig_data, replayed_data = run_scenarios(Scenario.ACCEL_SPIKE_MIDWAY, self.logs)
     assert np.allclose(orig_data['yaw_rate'], replayed_data['yaw_rate'], atol=np.radians(0.35))
     assert np.allclose(orig_data['roll'], replayed_data['roll'], atol=np.radians(0.55))
@@ -176,6 +182,7 @@ class TestLocationdScenarios:
     Test: timing of 150ms off for the single accelerometer message in the middle of the segment
     Expected Result: the message is ignored, and inputsOK is False for that time
     """
+    import numpy as np
     orig_data, replayed_data = run_scenarios(Scenario.SENSOR_TIMING_SPIKE_MIDWAY, self.logs)
     assert np.all(replayed_data['inputs_flag'] == orig_data['inputs_flag'])
     assert np.all(replayed_data['sensors_flag'] == orig_data['sensors_flag'])
@@ -185,6 +192,7 @@ class TestLocationdScenarios:
     Test: consistent timing spikes for N accelerometer messages in the middle of the segment
     Expected Result: inputsOK becomes False after N of bad measurements
     """
+    import numpy as np
     orig_data, replayed_data = run_scenarios(Scenario.SENSOR_TIMING_CONSISTENT_SPIKES, self.logs)
     assert np.diff(replayed_data['inputs_flag'])[501] == -1.0
     assert np.diff(replayed_data['inputs_flag'])[707] == 1.0

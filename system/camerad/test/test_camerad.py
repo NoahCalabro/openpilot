@@ -1,7 +1,6 @@
 import os
 import time
 import pytest
-import numpy as np
 
 import cereal.messaging as messaging
 from cereal.services import SERVICE_LIST
@@ -34,6 +33,7 @@ def run_and_log(procs, services, duration):
 
 @pytest.fixture(scope="module")
 def logs():
+  import numpy as np
   logs = run_and_log(["camerad", ], CAMERAS, TEST_TIMESPAN)
   ts = msgs_to_time_series(logs)
 
@@ -49,6 +49,7 @@ def logs():
 @pytest.mark.tici
 class TestCamerad:
   def test_frame_skips(self, logs):
+    import numpy as np
     for c in CAMERAS:
       assert set(np.diff(logs[c]['frameId'])) == {1, }, f"{c} has frame skips"
 
@@ -68,6 +69,7 @@ class TestCamerad:
     self._sanity_checks(logs)
 
   def _sanity_checks(self, ts):
+    import numpy as np
     for c in CAMERAS:
       assert c in ts
       assert len(ts[c]['t']) > 20
@@ -87,6 +89,7 @@ class TestCamerad:
       assert np.all((ts[c]['t'] - ts[c]['timestampEof']/1e9) > 1e-7)
 
   def test_stress_test(self):
+    import numpy as np
     os.environ['SPECTRA_ERROR_PROB'] = '0.008'
     logs = run_and_log(["camerad", ], CAMERAS, 10)
     ts = msgs_to_time_series(logs)

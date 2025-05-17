@@ -1,5 +1,3 @@
-import numpy as np
-
 from cereal import log
 from openpilot.common.realtime import DT_DMON
 from openpilot.selfdrive.monitoring.helpers import DriverMonitoring, DRIVER_MONITOR_SETTINGS
@@ -138,6 +136,7 @@ class TestMonitoring:
   # engaged, invisible driver, down to orange, driver touches wheel; then down to orange again, driver appears
   #  - both actions should clear the alert, but momentary appearance should not
   def test_sometimes_transparent_commuter(self):
+    import numpy as np
     _visible_time = np.random.choice([0.5, 10])
     ds_vector = always_no_face[:]*2
     interaction_vector = always_false[:]*2

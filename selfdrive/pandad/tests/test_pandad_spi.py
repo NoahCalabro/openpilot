@@ -1,6 +1,5 @@
 import os
 import time
-import numpy as np
 import pytest
 import random
 
@@ -25,6 +24,7 @@ class TestBoarddSpi:
 
   @with_processes(['pandad'])
   def test_spi_corruption(self, subtests):
+    import numpy as np
     setup_pandad(1)
 
     sendcan = messaging.pub_sock('sendcan')

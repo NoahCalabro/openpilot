@@ -1,7 +1,6 @@
 import os
 import pytest
 import time
-import numpy as np
 from collections import namedtuple, defaultdict
 
 import cereal.messaging as messaging
@@ -140,6 +139,7 @@ class TestSensord:
     assert seen in SENSOR_CONFIGURATIONS
 
   def test_lsm6ds3_timing(self, subtests):
+    import numpy as np
     # verify measurements are sampled and published at 104Hz
 
     sensor_t = {
@@ -202,6 +202,7 @@ class TestSensord:
     assert avg_diff < 4, f"Avg packet diff: {avg_diff:.1f}ms"
 
   def test_sensor_values(self):
+    import numpy as np
     sensor_values = dict()
     for etype in self.events:
       for measurement in self.events[etype]:

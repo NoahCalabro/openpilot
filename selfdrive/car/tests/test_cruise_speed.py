@@ -1,6 +1,5 @@
 import pytest
 import itertools
-import numpy as np
 
 from parameterized import parameterized_class
 from cereal import log
@@ -117,6 +116,7 @@ class TestVCruiseHelper:
     Asserts pressing set while enabled with gas pressed sets
     the speed to the maximum of vEgo and current cruise speed.
     """
+    import numpy as np
 
     for v_ego in np.linspace(0, 100, 101):
       self.reset_cruise_speed_state()
@@ -140,6 +140,7 @@ class TestVCruiseHelper:
     """
     Asserts allowed cruise speeds on enabling with SET.
     """
+    import numpy as np
 
     for experimental_mode in (True, False):
       for v_ego in np.linspace(0, 100, 101):

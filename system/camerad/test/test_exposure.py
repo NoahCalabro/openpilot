@@ -1,5 +1,4 @@
 import time
-import numpy as np
 import pytest
 
 from openpilot.selfdrive.test.helpers import with_processes
@@ -15,10 +14,12 @@ class TestCamerad:
     pass
 
   def _numpy_rgb2gray(self, im):
+    import numpy as np
     ret = np.clip(im[:,:,2] * 0.114 + im[:,:,1] * 0.587 + im[:,:,0] * 0.299, 0, 255).astype(np.uint8)
     return ret
 
   def _is_exposure_okay(self, i, med_mean=None):
+    import numpy as np
     if med_mean is None:
       med_mean = np.array([[0.2,0.4],[0.2,0.6]])
     h, w = i.shape[:2]

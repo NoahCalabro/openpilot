@@ -1,5 +1,4 @@
 import pytest
-import numpy as np
 from openpilot.selfdrive.controls.lib.lateral_mpc_lib.lat_mpc import LateralMpc
 from openpilot.selfdrive.controls.lib.drive_helpers import CAR_ROTATION_RADIUS
 from openpilot.selfdrive.controls.lib.lateral_mpc_lib.lat_mpc import N as LAT_MPC_N
@@ -7,6 +6,7 @@ from openpilot.selfdrive.controls.lib.lateral_mpc_lib.lat_mpc import N as LAT_MP
 
 def run_mpc(lat_mpc=None, v_ref=30., x_init=0., y_init=0., psi_init=0., curvature_init=0.,
             lane_width=3.6, poly_shift=0.):
+  import numpy as np
 
   if lat_mpc is None:
     lat_mpc = LateralMpc()
@@ -43,28 +43,33 @@ class TestLateralMpc:
       assert sol[0,i,0] == pytest.approx(sol[1,i,0], abs=curvature)
 
   def test_straight(self):
+    import numpy as np
     sol = run_mpc()
     self._assert_null(np.array([sol]))
 
   def test_y_symmetry(self):
+    import numpy as np
     sol = []
     for y_init in [-0.5, 0.5]:
       sol.append(run_mpc(y_init=y_init))
     self._assert_simmetry(np.array(sol))
 
   def test_poly_symmetry(self):
+    import numpy as np
     sol = []
     for poly_shift in [-1., 1.]:
       sol.append(run_mpc(poly_shift=poly_shift))
     self._assert_simmetry(np.array(sol))
 
   def test_curvature_symmetry(self):
+    import numpy as np
     sol = []
     for curvature_init in [-0.1, 0.1]:
       sol.append(run_mpc(curvature_init=curvature_init))
     self._assert_simmetry(np.array(sol))
 
   def test_psi_symmetry(self):
+    import numpy as np
     sol = []
     for psi_init in [-0.1, 0.1]:
       sol.append(run_mpc(psi_init=psi_init))
@@ -77,6 +82,7 @@ class TestLateralMpc:
       assert y_init >= abs(y)
 
   def test_switch_convergence(self):
+    import numpy as np
     lat_mpc = LateralMpc()
     sol = run_mpc(lat_mpc=lat_mpc, poly_shift=3.0, v_ref=7.0)
     right_psi_deg = np.degrees(sol[:,2])

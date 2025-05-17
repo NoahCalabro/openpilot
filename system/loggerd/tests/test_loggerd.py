@@ -1,4 +1,3 @@
-import numpy as np
 import os
 import re
 import random
@@ -138,6 +137,7 @@ class TestLoggerd:
 
   @pytest.mark.skip("FIXME: encoderd sometimes crashes in CI when running with pytest-xdist")
   def test_rotation(self):
+    import numpy as np
     os.environ["LOGGERD_TEST"] = "1"
     Params().put("RecordFront", "1")
 

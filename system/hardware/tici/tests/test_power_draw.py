@@ -1,7 +1,6 @@
 from collections import defaultdict, deque
 import pytest
 import time
-import numpy as np
 from dataclasses import dataclass
 from tabulate import tabulate
 
@@ -54,11 +53,13 @@ class TestPowerDraw:
     return int(sum(SAMPLE_TIME * SERVICE_LIST[msg].frequency for msg in proc.msgs))
 
   def valid_msg_count(self, proc, msg_counts):
+    import numpy as np
     msgs_received = sum(msg_counts[msg] for msg in proc.msgs)
     msgs_expected = self.get_expected_messages(proc)
     return np.isclose(msgs_expected, msgs_received, rtol=.02, atol=2)
 
   def valid_power_draw(self, proc, used):
+    import numpy as np
     return np.isclose(used, proc.power, rtol=proc.rtol, atol=proc.atol)
 
   def tabulate_msg_counts(self, msgs_and_power):
@@ -69,6 +70,7 @@ class TestPowerDraw:
     return msg_counts
 
   def get_power_with_warmup_for_target(self, proc, prev):
+    import numpy as np
     socks = {msg: messaging.sub_sock(msg) for msg in proc.msgs}
     for sock in socks.values():
       messaging.drain_sock_raw(sock)

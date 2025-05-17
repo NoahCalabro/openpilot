@@ -1,5 +1,4 @@
 import random
-import numpy as np
 import time
 import pytest
 
@@ -17,6 +16,7 @@ DT = 0.05
 
 
 def process_messages(mocker, estimator, lag_frames, n_frames, vego=20.0, rejection_threshold=0.0):
+  import numpy as np
   class ZeroMock(mocker.Mock):
     def __getattr__(self, *args):
       return 0
@@ -72,6 +72,7 @@ class TestLagd:
     assert valid_blocks == msg.liveDelay.validBlocks
 
   def test_ncc(self):
+    import numpy as np
     lag_frames = random.randint(1, 19)
 
     desired_sig = np.sin(np.arange(0.0, 10.0, 0.1))
@@ -95,6 +96,7 @@ class TestLagd:
     assert np.argmax(corr) in range(lag_frames - MAX_ERR_FRAMES, lag_frames + MAX_ERR_FRAMES + 1)
 
   def test_empty_estimator(self, mocker):
+    import numpy as np
     mocked_CP = mocker.Mock(steerActuatorDelay=0.8)
     estimator = LateralLagEstimator(mocked_CP, DT)
     msg = estimator.get_msg(True)
@@ -104,6 +106,7 @@ class TestLagd:
     assert msg.liveDelay.validBlocks == 0
 
   def test_estimator_basics(self, mocker, subtests):
+    import numpy as np
     for lag_frames in range(5):
       with subtests.test(msg=f"lag_frames={lag_frames}"):
         mocked_CP = mocker.Mock(steerActuatorDelay=0.8)
@@ -117,6 +120,7 @@ class TestLagd:
         assert msg.liveDelay.validBlocks == BLOCK_NUM_NEEDED
 
   def test_estimator_masking(self, mocker):
+    import numpy as np
     mocked_CP, lag_frames = mocker.Mock(steerActuatorDelay=0.8), random.randint(1, 19)
     estimator = LateralLagEstimator(mocked_CP, DT, min_recovery_buffer_sec=0.0, min_yr=0.0, min_valid_block_count=1)
     process_messages(mocker, estimator, lag_frames, (int(MIN_OKAY_WINDOW_SEC / DT) + BLOCK_SIZE) * 2, rejection_threshold=0.4)
@@ -127,6 +131,7 @@ class TestLagd:
   @pytest.mark.skipif(PC, reason="only on device")
   @pytest.mark.timeout(60)
   def test_estimator_performance(self, mocker):
+    import numpy as np
     mocked_CP = mocker.Mock(steerActuatorDelay=0.8)
     estimator = LateralLagEstimator(mocked_CP, DT)
 

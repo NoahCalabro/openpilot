@@ -1,5 +1,4 @@
 import random
-import numpy as np
 import json
 
 from cereal import messaging
@@ -22,6 +21,7 @@ def get_random_live_parameters(CP):
 
 class TestParamsd:
   def test_read_saved_params(self):
+    import numpy as np
     params = Params()
 
     lr = migrate(LogReader(TEST_ROUTE), [migrate_carParams])
@@ -41,6 +41,7 @@ class TestParamsd:
 
   # TODO Remove this test after the support for old format is removed
   def test_read_saved_params_old_format(self):
+    import numpy as np
     params = Params()
 
     lr = migrate(LogReader(TEST_ROUTE), [migrate_carParams])

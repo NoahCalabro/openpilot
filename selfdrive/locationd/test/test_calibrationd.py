@@ -1,7 +1,5 @@
 import random
 
-import numpy as np
-
 import cereal.messaging as messaging
 from cereal import log
 from openpilot.common.params import Params
@@ -15,6 +13,7 @@ def process_messages(c, cam_odo_calib, cycles,
                      cam_odo_yr=0.0,
                      cam_odo_speed_std=1e-3,
                      cam_odo_height_std=1e-3):
+  import numpy as np
   old_rpy_weight_prev = 0.0
   for _ in range(cycles):
     assert (old_rpy_weight_prev - c.old_rpy_weight < 1/SMOOTH_CYCLES + 1e-3)
@@ -32,6 +31,7 @@ def process_messages(c, cam_odo_calib, cycles,
 class TestCalibrationd:
 
   def test_read_saved_params(self):
+    import numpy as np
     msg = messaging.new_message('liveCalibration')
     msg.liveCalibration.validBlocks = random.randint(1, 10)
     msg.liveCalibration.rpyCalib = [random.random() for _ in range(3)]
@@ -45,6 +45,7 @@ class TestCalibrationd:
 
 
   def test_calibration_basics(self):
+    import numpy as np
     c = Calibrator(param_put=False)
     process_messages(c, [0.0, 0.0, 0.0], BLOCK_SIZE * INPUTS_WANTED)
     assert c.valid_blocks == INPUTS_WANTED
@@ -54,6 +55,7 @@ class TestCalibrationd:
 
 
   def test_calibration_low_speed_reject(self):
+    import numpy as np
     c = Calibrator(param_put=False)
     process_messages(c, [0.0, 0.0, 0.0], BLOCK_SIZE * INPUTS_WANTED, cam_odo_speed=MIN_SPEED_FILTER - 1)
     process_messages(c, [0.0, 0.0, 0.0], BLOCK_SIZE * INPUTS_WANTED, carstate_speed=MIN_SPEED_FILTER - 1)
@@ -63,6 +65,7 @@ class TestCalibrationd:
 
 
   def test_calibration_yaw_rate_reject(self):
+    import numpy as np
     c = Calibrator(param_put=False)
     process_messages(c, [0.0, 0.0, 0.0], BLOCK_SIZE * INPUTS_WANTED, cam_odo_yr=MAX_YAW_RATE_FILTER)
     assert c.valid_blocks == 0
@@ -71,6 +74,7 @@ class TestCalibrationd:
 
 
   def test_calibration_speed_std_reject(self):
+    import numpy as np
     c = Calibrator(param_put=False)
     process_messages(c, [0.0, 0.0, 0.0], BLOCK_SIZE * INPUTS_WANTED, cam_odo_speed_std=1e3)
     assert c.valid_blocks == INPUTS_NEEDED
@@ -78,6 +82,7 @@ class TestCalibrationd:
 
 
   def test_calibration_speed_std_height_reject(self):
+    import numpy as np
     c = Calibrator(param_put=False)
     process_messages(c, [0.0, 0.0, 0.0], BLOCK_SIZE * INPUTS_WANTED, cam_odo_height_std=1e3)
     assert c.valid_blocks == INPUTS_NEEDED
@@ -85,6 +90,7 @@ class TestCalibrationd:
 
 
   def test_calibration_auto_reset(self):
+    import numpy as np
     c = Calibrator(param_put=False)
     process_messages(c, [0.0, 0.0, 0.0], BLOCK_SIZE * INPUTS_NEEDED)
     assert c.valid_blocks == INPUTS_NEEDED

@@ -5,7 +5,6 @@ import pytest
 import shutil
 import subprocess
 import time
-import numpy as np
 from collections import Counter, defaultdict
 from pathlib import Path
 from tabulate import tabulate
@@ -211,6 +210,7 @@ class TestOnroad:
         assert minn < sz <  maxx
 
   def test_ui_timings(self):
+    import numpy as np
     result = "\n"
     result += "------------------------------------------------\n"
     result += "-------------- UI Draw Timing ------------------\n"
@@ -286,6 +286,7 @@ class TestOnroad:
     assert cpu_ok
 
   def test_memory_usage(self):
+    import numpy as np
     print("\n------------------------------------------------")
     print("--------------- Memory Usage -------------------")
     print("------------------------------------------------")
@@ -300,6 +301,7 @@ class TestOnroad:
     assert np.average(np.diff(mems)) <= 1, "Average memory increase too high"
 
   def test_camera_frame_timings(self, subtests):
+    import numpy as np
     # test timing within a single camera
     result = "\n"
     result += "------------------------------------------------\n"
@@ -318,6 +320,7 @@ class TestOnroad:
     print(result)
 
   def test_camera_sync(self, subtests):
+    import numpy as np
     cam_states = ['roadCameraState', 'wideRoadCameraState', 'driverCameraState']
     encode_cams = ['roadEncodeIdx', 'wideRoadEncodeIdx', 'driverEncodeIdx']
     for cams in (cam_states, encode_cams):
@@ -371,6 +374,7 @@ class TestOnroad:
           assert enc_eof == cam_eof, f"EOF mismatch: frameId={fid}, enc_eof={enc_eof}, cam_eof={cam_eof}"
 
   def test_mpc_execution_timings(self):
+    import numpy as np
     result = "\n"
     result += "------------------------------------------------\n"
     result += "-----------------  MPC Timing ------------------\n"
@@ -388,6 +392,7 @@ class TestOnroad:
     print(result)
 
   def test_model_execution_timings(self, subtests):
+    import numpy as np
     result = "\n"
     result += "------------------------------------------------\n"
     result += "----------------- Model Timing -----------------\n"
@@ -414,6 +419,7 @@ class TestOnroad:
     print(result)
 
   def test_timings(self):
+    import numpy as np
     passed = True
     print("\n------------------------------------------------")
     print("----------------- Service Timings --------------")
